@@ -116,7 +116,20 @@
     B -->|No| D[Try Again]</pre>
 
             <p>Sequence Diagram:</p>
-            <pre>sequenceDiagram
+            <pre>
+---
+config:
+  theme: forest
+---
+
+%%{init:{"themeVariables": {
+    "noteBkgColor":"#f4f4f4", 
+    "noteTextColor":"black",
+    "noteBorderColor":"#000"
+  }
+}}%%
+
+    sequenceDiagram
     participant Alice
     participant Bob
     Alice->>Bob: Hello Bob, how are you?
