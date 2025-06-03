@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .input-section {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            resize: vertical;
+        }
+        .button-row {
+            margin: 15px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output-section {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        #error {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .examples {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+        }
+        .examples h3 {
+            margin-top: 0;
+        }
+        .examples pre {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mermaid Diagram Viewer</h1>
+        
+        <div class="input-section">
+            <h2>Enter Mermaid Diagram Code:</h2>
+            <textarea id="mermaidInput" placeholder="Paste your mermaid diagram code here...">graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Try Again]</textarea>
+            <div class="button-row">
+                <button onclick="renderDiagram()">Render Diagram</button>
+                <button onclick="clearDiagram()">Clear</button>
+            </div>
+            <div id="error"></div>
+        </div>
+        
+        <div class="output-section">
+            <h2>Rendered Diagram:</h2>
+            <div id="mermaidOutput" class="mermaid"></div>
+        </div>
+
+        <div class="examples">
+            <h3>Example Diagrams:</h3>
+            <p>Flow Chart:</p>
+            <pre>graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Try Again]</pre>
+
+            <p>Sequence Diagram:</p>
+            <pre>sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>Bob: Hello Bob, how are you?
+    Bob->>Alice: I'm good thanks!</pre>
+
+            <p>Class Diagram:</p>
+            <pre>classDiagram
+    Animal <|-- Duck
+    Animal <|-- Fish
+    Animal <|-- Zebra
+    Animal : +int age
+    Animal : +String gender
+    Animal: +isMammal()
+    Animal: +mate()
+    class Duck{
+        +String beakColor
+        +swim()
+        +quack()
+    }</pre>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+
+        // Render diagram when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDiagram();
+        });
+
+        // Function to render the diagram
+        function renderDiagram() {
+            const input = document.getElementById('mermaidInput').value;
+            const outputDiv = document.getElementById('mermaidOutput');
+            const errorDiv = document.getElementById('error');
+            
+            // Clear previous content and errors
+            outputDiv.innerHTML = input;
+            errorDiv.textContent = '';
+            
+            try {
+                // Render the diagram
+                mermaid.render('graphDiv', input)
+                    .then(result => {
+                        outputDiv.innerHTML = result.svg;
+                    })
+                    .catch(error => {
+                        errorDiv.textContent = 'Error rendering diagram: ' + error.message;
+                        console.error('Error rendering diagram:', error);
+                    });
+            } catch (error) {
+                errorDiv.textContent = 'Error parsing diagram: ' + error.message;
+                console.error('Error parsing diagram:', error);
+            }
+        }
+
+        // Function to clear the input and output
+        function clearDiagram() {
+            document.getElementById('mermaidInput').value = '';
+            document.getElementById('mermaidOutput').innerHTML = '';
+            document.getElementById('error').textContent = '';
+        }
+    </script>
+</body>
+</html>
