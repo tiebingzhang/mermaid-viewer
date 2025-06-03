@@ -2,6 +2,7 @@
 
 A simple, self-contained HTML application that lets you quickly render [Mermaid](https://mermaid.js.org/) diagrams from code snippets. Perfect for quickly visualizing flowcharts, sequence diagrams, class diagrams, and other supported Mermaid formats without requiring any installation or online tools.
 
+[Try it here](https://tiebingzhang.github.io/mermaid-viewer/)
 ## Features
 
 - **Single-file Solution**: Everything contained in one HTML file - no server needed
