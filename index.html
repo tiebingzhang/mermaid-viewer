@@ -98,6 +98,9 @@
             <div class="button-row">
                 <button onclick="renderDiagram()">Render Diagram</button>
                 <button onclick="clearDiagram()">Clear</button>
+                <button onclick="loadMermaidFile()">Load File</button>
+                <button onclick="saveMermaidFile()">Save File</button>
+                <input type="file" id="fileInput" accept=".mermaid" style="display: none;">
             </div>
             <div id="error"></div>
         </div>
@@ -196,6 +199,43 @@ config:
             document.getElementById('mermaidInput').value = '';
             document.getElementById('mermaidOutput').innerHTML = '';
             document.getElementById('error').textContent = '';
+        }
+
+        // Function to load a .mermaid file
+        function loadMermaidFile() {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.click();
+            
+            fileInput.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('mermaidInput').value = e.target.result;
+                        renderDiagram(); // Automatically render after loading
+                    };
+                    reader.readAsText(file);
+                }
+            };
+        }
+
+        // Function to save the text box content to a .mermaid file
+        function saveMermaidFile() {
+            const content = document.getElementById('mermaidInput').value;
+            if (!content.trim()) {
+                alert('No content to save!');
+                return;
+            }
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'diagram.mermaid';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
